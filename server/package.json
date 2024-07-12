@@ -1,0 +1,29 @@
+{
+  "name": "interview-server",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "pnpm run build && node ./dist/main.js",
+    "seed": "pnpm run build && node ./dist/seed.js",
+    "migrate": "pnpm knex migrate:latest --knexfile ./knexfile.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@8.15.4",
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "prettier": "^3.3.2",
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "dayjs": "^1.11.11",
+    "fastify": "^4.28.1",
+    "knex": "^3.1.0",
+    "sqlite3": "^5.1.7"
+  }
+}
