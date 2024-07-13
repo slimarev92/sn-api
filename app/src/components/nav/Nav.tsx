@@ -1,35 +1,63 @@
-import { useContext, useEffect } from "react";
+import { Dispatch, useContext, useEffect } from "react";
 import { IUserMetadata } from "../../entities/user";
 import navClasses from "./nav.module.scss";
-import { DispatchUsersActionContext, UsersContext } from "../users/user-contexts";
+import { DispatchUsersAction, UsersContext } from "../users/users-contexts";
+import { IUsersAction } from "../users/UsersService";
+import { fetchUsers } from "../users/users-utils";
+import { DisaptchFeedsAction, FeedsState } from "../feeds/feeds-contexts";
+import { IFeed, IFeedsAction, IFeedsState } from "../feeds/FeedsService";
+import { fetchUserPosts } from "../feeds/feed-utils";
 
-const fetchUsers = async () => {
-    const res = await fetch("http://localhost:7777/api/users");
-    const users = (await res.json()) as IUserMetadata[];
+async function initialUsersLoad(dispatchUsersAction: Dispatch<IUsersAction>): Promise<void> {
+    dispatchUsersAction({
+        type: "loadStart",
+    });
 
-    return users;
-};
+    const users = await fetchUsers();
+
+    dispatchUsersAction({
+        type: "loadEnd",
+        payload: users,
+    });
+}
+
+async function handleShowClick(
+    user: IUserMetadata,
+    feedsState: IFeedsState,
+    dispatch: Dispatch<IFeedsAction>,
+) {
+    if (feedsState.feeds.find(f => f.username === user.username)) {
+        return;
+    }
+
+    const feed: IFeed = {
+        username: user.username,
+        posts: await fetchUserPosts(user.username),
+    };
+
+    dispatch({
+        type: "loadFeedEnd",
+        payload: feed,
+    });
+}
+
+function isFeedShown(user: IUserMetadata, feedsState: IFeedsState): boolean {
+    return feedsState.feeds.some(f => f.username === user.username);
+}
 
 export default function Nav() {
     const usersState = useContext(UsersContext);
-    const dispatchUsersAction = useContext(DispatchUsersActionContext);
+    const dispatchUsersAction = useContext(DispatchUsersAction);
+    const feedsState = useContext(FeedsState);
+    const dispatchFeedsAction = useContext(DisaptchFeedsAction);
 
     useEffect(() => {
-        dispatchUsersAction({
-            type: "loadStart",
-        });
+        if (usersState.loading || usersState.users.length) {
+            return;
+        }
 
-        fetchUsers().then((users) => {
-            dispatchUsersAction({
-                type: "loadEnd",
-                payload: users,
-            });
-        });
-    }, [dispatchUsersAction]);
-
-    const handleShowClick = (user: IUserMetadata) => {
-        return user;
-    };
+        initialUsersLoad(dispatchUsersAction);
+    }, [dispatchUsersAction, usersState]);
 
     return (
         <nav className={navClasses.nav}>
@@ -38,10 +66,15 @@ export default function Nav() {
                 "Loading"
             ) : (
                 <ul>
-                    {usersState.users.map((u) => (
+                    {usersState.users.map(u => (
                         <li key={u.username}>
                             <span>{u.username}</span>
-                            <button onClick={() => handleShowClick(u)}>Show</button>
+                            <button
+                                onClick={() => handleShowClick(u, feedsState, dispatchFeedsAction)}
+                                disabled={isFeedShown(u, feedsState)}
+                            >
+                                Show
+                            </button>
                             <span>{u.likedPosts}</span>/<span>{u.totalPosts}</span>
                         </li>
                     ))}

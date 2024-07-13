@@ -7,7 +7,7 @@ import { difference } from "./utils.js";
 const knex = knexFactory({
     client: "sqlite3",
     connection: {
-        filename: "./interview.db"
+        filename: "./interview.db",
     },
 });
 
@@ -17,7 +17,8 @@ export async function getUsers(): Promise<IUsersApiResponse> {
     const usernamesWithPosts = new Set<IUsername>();
 
     const queryResult = await knex
-        .select("username").count("*", { as: "count" })
+        .select("username")
+        .count("*", { as: "count" })
         .from<IPost>("posts")
         .groupBy("username", "liked");
 
@@ -29,7 +30,7 @@ export async function getUsers(): Promise<IUsersApiResponse> {
         response.push({
             username: notLiked.username,
             totalPosts: Number(notLiked.count) + Number(liked.count),
-            likedPosts: Number(liked.count)
+            likedPosts: Number(liked.count),
         });
     }
 
@@ -38,11 +39,11 @@ export async function getUsers(): Promise<IUsersApiResponse> {
         response.push({
             username,
             totalPosts: 0,
-            likedPosts: 0
+            likedPosts: 0,
         });
     }
 
-    response.sort((first, second) => first.username > second.username ? 1 : -1);
+    response.sort((first, second) => (first.username > second.username ? 1 : -1));
 
     return response;
 }
@@ -55,7 +56,8 @@ export async function getUser(username: string): Promise<IUsersApiResponse | und
     }
 
     const queryResult = await knex
-        .select("username").count("*", { as: "count" })
+        .select("username")
+        .count("*", { as: "count" })
         .from<IPost>("posts")
         .where("username", "=", username)
         .groupBy("username", "liked");
@@ -66,7 +68,7 @@ export async function getUser(username: string): Promise<IUsersApiResponse | und
         response.push({
             username: notLiked.username,
             totalPosts: Number(notLiked.count) + Number(liked.count),
-            likedPosts: Number(liked.count)
+            likedPosts: Number(liked.count),
         });
     }
 
@@ -86,8 +88,7 @@ export async function getAllUsernames(): Promise<Set<IUsername>> {
 }
 
 export async function getPosts(): Promise<IPost[]> {
-    const posts = await knex.select("*")
-        .from<IPost>("posts");
+    const posts = await knex.select("*").from<IPost>("posts");
 
     // sqlite hack
     for (const post of posts) {
@@ -98,9 +99,7 @@ export async function getPosts(): Promise<IPost[]> {
 }
 
 export async function getUserPosts(username: string): Promise<IPost[]> {
-    const posts = await knex.select("*")
-        .from<IPost>("posts")
-        .where("username", "=", username);
+    const posts = await knex.select("*").from<IPost>("posts").where("username", "=", username);
 
     // sqlite hack
     for (const post of posts) {
@@ -111,7 +110,8 @@ export async function getUserPosts(username: string): Promise<IPost[]> {
 }
 
 export async function doesUserExist(username: string): Promise<boolean> {
-    const userOrNothing = await knex.from<{ username: string }>("users")
+    const userOrNothing = await knex
+        .from<{ username: string }>("users")
         .where("username", "=", username)
         .first();
 
@@ -119,7 +119,8 @@ export async function doesUserExist(username: string): Promise<boolean> {
 }
 
 export async function likePost(id: number, liked: boolean): Promise<IPost | undefined> {
-    const posts = await knex.update({ liked: liked ? 1 : 0 })
+    const posts = await knex
+        .update({ liked: liked ? 1 : 0 })
         .from<IPost>("posts")
         .where("id", "=", id)
         .returning("*");

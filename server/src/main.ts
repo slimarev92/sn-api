@@ -4,7 +4,7 @@ import { IPost } from "./entities/post.js";
 import fastifyCors from "@fastify/cors";
 
 const fastify = fastifyFactory({
-    logger: true
+    logger: true,
 });
 
 // Disable CORS.
@@ -56,6 +56,5 @@ fastify.post("/api/posts/like", async (req, response) => {
 });
 
 fastify.listen({
-    port: 7777
+    port: 7777,
 });
-
