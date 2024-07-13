@@ -1,0 +1,22 @@
+@use "../../styles//utils.scss" as utils;
+@use "../../styles/variables.scss" as vars;
+
+.main {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: vars.$gap;
+
+
+    > h2 {
+        @include utils.heading;
+        grid-row-start: 1;
+        grid-row-end: 2;
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+}
+
+.feed {
+    overflow: auto;
+}

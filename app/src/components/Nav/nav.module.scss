@@ -1,0 +1,16 @@
+@use "../../styles/utils.scss" as utils;
+
+.nav {
+    display: grid;
+    grid-template-rows: auto 1fr;
+
+    h2 {
+        @include utils.heading;
+    }
+
+
+    > ul {
+        overflow: auto;
+    }
+}
+

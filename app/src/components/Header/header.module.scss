@@ -1,0 +1,7 @@
+@use "../../styles/utils.scss" as utils;
+
+.header {
+    > h1 {
+        @include utils.heading;
+    }
+}

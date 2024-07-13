@@ -1,0 +1,27 @@
+@use "../../styles/utils.scss" as utils;
+@use "../../styles/variables.scss" as vars;
+
+.app {
+    display: grid;
+    height: 100vh;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 25% 1fr;
+    gap: vars.$gap;
+
+    > * {
+       background-color: whitesmoke;
+       padding: 1rem;
+    }
+
+    header {
+        grid-row-start: 1;
+        grid-row-end: 2;
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+
+    // TODO SASHA: CHECK WHAT THE BEST PRACTICE IS: TECHNICALL BOTH OF THESE ELEMENETS ARE NOT PRESENT DIRECTLY IN THE COMP.
+    nav, main {
+        overflow: hidden;
+    }
+}
