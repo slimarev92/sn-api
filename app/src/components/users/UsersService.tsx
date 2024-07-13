@@ -40,11 +40,7 @@ function reducer(prevState: IUsersState, action: IUsersAction): IUsersState {
 }
 
 // TODO SASHA: BETTER NAME THAN SERVICE?
-export default function UsersService({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function UsersService({ children }: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(reducer, {
         loading: false,
         users: [],
@@ -52,9 +48,7 @@ export default function UsersService({
 
     return (
         <DispatchUsersActionContext.Provider value={dispatch}>
-            <UsersContext.Provider value={state}>
-                {children}
-            </UsersContext.Provider>
+            <UsersContext.Provider value={state}>{children}</UsersContext.Provider>
         </DispatchUsersActionContext.Provider>
     );
 }

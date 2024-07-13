@@ -1,10 +1,7 @@
 import { useContext, useEffect } from "react";
 import { IUserMetadata } from "../../entities/user";
 import navClasses from "./nav.module.scss";
-import {
-    DispatchUsersActionContext,
-    UsersContext,
-} from "../users/user-contexts";
+import { DispatchUsersActionContext, UsersContext } from "../users/user-contexts";
 
 const fetchUsers = async () => {
     const res = await fetch("http://localhost:7777/api/users");
@@ -44,11 +41,8 @@ export default function Nav() {
                     {usersState.users.map((u) => (
                         <li key={u.username}>
                             <span>{u.username}</span>
-                            <button onClick={() => handleShowClick(u)}>
-                                Show
-                            </button>
-                            <span>{u.likedPosts}</span>/
-                            <span>{u.totalPosts}</span>
+                            <button onClick={() => handleShowClick(u)}>Show</button>
+                            <span>{u.likedPosts}</span>/<span>{u.totalPosts}</span>
                         </li>
                     ))}
                 </ul>

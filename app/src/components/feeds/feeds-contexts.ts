@@ -5,6 +5,4 @@ export const FeedsState = createContext<IFeedsState>({
     loading: false,
     feeds: [],
 });
-export const DisaptchFeedsAction = createContext<Dispatch<IFeedsAction>>(
-    () => {},
-);
+export const DisaptchFeedsAction = createContext<Dispatch<IFeedsAction>>(() => {});

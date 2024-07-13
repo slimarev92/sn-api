@@ -45,16 +45,10 @@ export default function Main() {
             ) : (
                 <>
                     <div className={mainClasses.feed}>
-                        <Feed
-                            username={"f1"}
-                            posts={feedsState.feeds[0] || []}
-                        />
+                        <Feed username={"f1"} posts={feedsState.feeds[0] || []} />
                     </div>
                     <div className={mainClasses.feed}>
-                        <Feed
-                            username={"f2"}
-                            posts={feedsState.feeds[1] || []}
-                        />
+                        <Feed username={"f2"} posts={feedsState.feeds[1] || []} />
                     </div>
                 </>
             )}

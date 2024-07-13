@@ -47,9 +47,7 @@ export function FeedsService({ children }: { children: ReactNode }) {
 
     return (
         <FeedsState.Provider value={state}>
-            <DisaptchFeedsAction.Provider value={dispatch}>
-                {children}
-            </DisaptchFeedsAction.Provider>
+            <DisaptchFeedsAction.Provider value={dispatch}>{children}</DisaptchFeedsAction.Provider>
         </FeedsState.Provider>
     );
 }
