@@ -1,77 +1,34 @@
-import { Dispatch, useContext, useEffect } from "react";
+import { useContext } from "react";
 import { IUserMetadata } from "../../entities/user";
 import navClasses from "./nav.module.scss";
-import { DispatchUsersAction, UsersContext } from "../users/users-contexts";
-import { IUsersAction } from "../users/UsersService";
-import { fetchUsers } from "../users/users-utils";
-import { DisaptchFeedsAction, FeedsState } from "../feeds/feeds-contexts";
-import { IFeed, IFeedsAction, IFeedsState } from "../feeds/FeedsService";
-import { fetchUserPosts } from "../feeds/feed-utils";
+import { useUsers } from "../users/users-utils";
+import { SelectedFeedsContext } from "../feeds/feeds-context";
 
-async function initialUsersLoad(dispatchUsersAction: Dispatch<IUsersAction>): Promise<void> {
-    dispatchUsersAction({
-        type: "loadStart",
-    });
-
-    const users = await fetchUsers();
-
-    dispatchUsersAction({
-        type: "loadEnd",
-        payload: users,
-    });
-}
-
-async function handleShowClick(
-    user: IUserMetadata,
-    feedsState: IFeedsState,
-    dispatch: Dispatch<IFeedsAction>,
-) {
-    if (feedsState.feeds.find(f => f.username === user.username)) {
-        return;
-    }
-
-    const feed: IFeed = {
-        username: user.username,
-        posts: await fetchUserPosts(user.username),
-    };
-
-    dispatch({
-        type: "loadFeedEnd",
-        payload: feed,
-    });
-}
-
-function isFeedShown(user: IUserMetadata, feedsState: IFeedsState): boolean {
-    return feedsState.feeds.some(f => f.username === user.username);
+function isFeedShown(user: IUserMetadata, selectedFeeds: string[]): boolean {
+    return selectedFeeds.some(f => f === user.username);
 }
 
 export default function Nav() {
-    const usersState = useContext(UsersContext);
-    const dispatchUsersAction = useContext(DispatchUsersAction);
-    const feedsState = useContext(FeedsState);
-    const dispatchFeedsAction = useContext(DisaptchFeedsAction);
+    const users = useUsers();
+    const [selectedFeeds, setSelectedFeeds] = useContext(SelectedFeedsContext);
 
-    useEffect(() => {
-        if (usersState.loading || usersState.users.length) {
-            return;
-        }
-
-        initialUsersLoad(dispatchUsersAction);
-    }, [dispatchUsersAction, usersState]);
+    const handleShowClick = (user: IUserMetadata) => {
+        setSelectedFeeds([user.username, selectedFeeds[0]]);
+    };
 
     return (
         <nav className={navClasses.nav}>
             <h2>nav</h2>
-            {usersState.loading ? (
+            {users.isPending ? (
                 "Loading"
             ) : (
                 <ul>
-                    {usersState.users.map(u => (
+                    {users.data?.map(u => (
                         <li key={u.username}>
                             <span>{u.username}</span>
                             <button
-                                onClick={() => handleShowClick(u, feedsState, dispatchFeedsAction)}
-                                disabled={isFeedShown(u, feedsState)}
+                                onClick={() => handleShowClick(u)}
+                                disabled={isFeedShown(u, selectedFeeds)}
                             >
                                 Show
                             </button>

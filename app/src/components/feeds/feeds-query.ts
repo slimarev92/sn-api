@@ -1,5 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
 import { IPost } from "../../entities/post";
-import { IFeed } from "./FeedsService";
+import { IFeed } from "./Feed";
 
 export async function fetchUserPosts(username: string): Promise<IPost[]> {
     const res = await fetch(`http://localhost:7777/api/posts/${username}`);
@@ -20,16 +21,21 @@ export async function fetchFeeds(usernames: string[]): Promise<IFeed[]> {
     });
 }
 
-export async function fetchLikePost(post: IPost): Promise<IPost> {
-    const res = await fetch("http://localhost:7777/api/posts/like", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
+export function useFeed(username: string) {
+    return useQuery({
+        queryKey: ["feeds", username],
+        queryFn: async query => {
+            const posts = await fetchUserPosts(query.queryKey[1]);
+
+            return {
+                username,
+                posts,
+            };
         },
-        body: JSON.stringify(post),
+        placeholderData: {
+            username: username,
+            posts: [],
+        },
+        enabled: !!username,
     });
-
-    const updatedPost = await res.json();
-
-    return updatedPost;
 }

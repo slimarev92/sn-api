@@ -1,5 +1,9 @@
 import { IPost } from "../../entities/post";
-import { IFeed } from "./FeedsService";
+
+export type IFeed = {
+    username: string;
+    posts: IPost[];
+};
 
 export function Feed({
     feed,

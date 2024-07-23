@@ -3,15 +3,16 @@ import ReactDOM from "react-dom/client";
 import App from "./components/app/App";
 
 import "./styles/style.scss";
-import UsersService from "./components/users/UsersService";
-import { FeedsService } from "./components/feeds/FeedsService";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { SelectedFeedsService } from "./components/feeds/feeds-context";
+import { queryClient } from "./utils/query-client";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
-        <FeedsService>
-            <UsersService>
+    <QueryClientProvider client={queryClient}>
+        <React.StrictMode>
+            <SelectedFeedsService>
                 <App />
-            </UsersService>
-        </FeedsService>
-    </React.StrictMode>,
+            </SelectedFeedsService>
+        </React.StrictMode>
+    </QueryClientProvider>,
 );
