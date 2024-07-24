@@ -2,11 +2,12 @@ version: 0.2
 
 phases:
   install:
-  runtime-versions:
-    nodejs: 18
-  commands:
-    - corepack enable
-    - pnpm install
+    runtime-versions:
+      nodejs: 18
+
+    commands:
+      - corepack enable
+      - pnpm install
 
   build:
     commands:
@@ -16,6 +17,6 @@ phases:
     commands:
       - echo Build finished
 
-artifcats:
+artifacts:
   files:
     - './sever/dist/**/*'
