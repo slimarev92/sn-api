@@ -19,4 +19,6 @@ phases:
 
 artifacts:
   files:
-    - './server/dist/**/*'
+    - '**/*'
+  base-directory: './server/dist'
+  discard-paths: yes
