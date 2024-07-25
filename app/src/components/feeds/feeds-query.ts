@@ -3,7 +3,7 @@ import { IPost } from "../../entities/post";
 import { IFeed } from "./Feed";
 
 export async function fetchUserPosts(username: string): Promise<IPost[]> {
-    const res = await fetch(`http://localhost:7777/api/posts/${username}`);
+    const res = await fetch(`/api/posts/${username}`);
     const posts = (await res.json()) as IPost[];
 
     return posts;

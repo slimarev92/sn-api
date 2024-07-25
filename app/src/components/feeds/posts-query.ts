@@ -4,7 +4,7 @@ import { queryClient } from "../../utils/query-client";
 import { IFeed } from "./Feed";
 
 export async function fetchLikePost(post: IPost): Promise<IPost> {
-    const res = await fetch("http://localhost:7777/api/posts/like", {
+    const res = await fetch("/api/posts/like", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
