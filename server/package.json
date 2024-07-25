@@ -7,19 +7,20 @@
     "scripts": {
         "build": "tsc && pnpm run copy-manifest",
         "start": "pnpm run build && node ./dist/main.js",
-        "copy-manifest": "cp ./package.json ./dist",
+        "copy-manifest": "cp ./package.json ./dist && cp ./knexfile.js ./dist && cp ./migrations ./dist/migrations -r",
         "migrate": "pnpm knex migrate:latest --knexfile ./knexfile.mjs",
-        "start-server": "node ./main.js"
+        "migrate-server": "npx knex migrate:latest --knexfile ./knexfile.mjs",
+        "start-server": "npm run migrate-server && node ./main.js"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "@faker-js/faker": "^8.4.1",
         "prettier": "^3.3.2",
         "typescript": "^5.5.3"
     },
     "dependencies": {
+        "@faker-js/faker": "^8.4.1",
         "@fastify/cors": "^9.0.1",
         "dayjs": "^1.11.11",
         "fastify": "^4.28.1",
