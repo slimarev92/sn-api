@@ -8,7 +8,8 @@
         "build": "tsc && pnpm run copy-manifest",
         "start": "pnpm run build && node ./dist/main.js",
         "copy-manifest": "cp ./package.json ./dist",
-        "migrate": "pnpm knex migrate:latest --knexfile ./knexfile.mjs"
+        "migrate": "pnpm knex migrate:latest --knexfile ./knexfile.mjs",
+        "start-server": "node ./main.js"
     },
     "keywords": [],
     "author": "",
