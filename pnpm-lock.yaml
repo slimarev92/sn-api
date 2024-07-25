@@ -56,6 +56,9 @@ importers:
 
   server:
     dependencies:
+      '@faker-js/faker':
+        specifier: ^8.4.1
+        version: 8.4.1
       '@fastify/cors':
         specifier: ^9.0.1
         version: 9.0.1
@@ -72,9 +75,6 @@ importers:
         specifier: ^5.1.7
         version: 5.1.7
     devDependencies:
-      '@faker-js/faker':
-        specifier: ^8.4.1
-        version: 8.4.1
       prettier:
         specifier: ^3.3.2
         version: 3.3.2
