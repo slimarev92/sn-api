@@ -2,6 +2,7 @@ import fastifyFactory from "fastify";
 import { doesUserExist, getUser, getUserPosts, getUsers, likePost } from "./db.js";
 import { IPost } from "./entities/post.js";
 import fastifyCors from "@fastify/cors";
+import { seed } from "./seed.js";
 
 const fastify = fastifyFactory({
     logger: true,
@@ -59,3 +60,5 @@ fastify.listen({
     host: "0.0.0.0",
     port: 7777,
 });
+
+seed();

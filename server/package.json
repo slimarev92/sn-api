@@ -7,7 +7,6 @@
     "scripts": {
         "build": "tsc && pnpm run copy-manifest",
         "start": "pnpm run build && node ./dist/main.js",
-        "seed": "pnpm run build && node ./dist/seed.js",
         "copy-manifest": "cp ./package.json ./dist",
         "migrate": "pnpm knex migrate:latest --knexfile ./knexfile.mjs"
     },

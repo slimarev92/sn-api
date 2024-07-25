@@ -1,5 +1,5 @@
 import knexFactory from "knex";
-import { faker } from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 import { IPost } from "./entities/post.js";
 import { IUsername } from "./entities/username.js";
 import dayjs from "dayjs";
@@ -7,8 +7,8 @@ import dayjs from "dayjs";
 const knex = knexFactory({
     client: "sqlite3",
     connection: {
-        filename: "./interview.db"
-    }
+        filename: "./interview.db",
+    },
 });
 
 const NUM_OF_USERS = 100;
@@ -26,7 +26,7 @@ async function seedUsers(): Promise<IUsername[]> {
             if (!usernames.has(username)) {
                 usernames.add(username);
 
-                await knex.into("users").insert({ username })
+                await knex.into("users").insert({ username });
 
                 break;
             }
@@ -41,7 +41,8 @@ async function seedUsers(): Promise<IUsername[]> {
 /** Adds up to MAX_NUM_OF_POSTS_PER_USER posts for each user. */
 async function seedPosts(usernames: IUsername[], userWithNoPosts: string): Promise<void> {
     for (const username of usernames) {
-        const numOfPosts = userWithNoPosts === username ? 0 : Math.random() * MAX_NUM_OF_POSTS_PER_USER;
+        const numOfPosts =
+            userWithNoPosts === username ? 0 : Math.random() * MAX_NUM_OF_POSTS_PER_USER;
         const percentageOfLikedPosts = faker.number.int({ min: 10, max: 50 });
 
         await seedUserPosts(username, numOfPosts, percentageOfLikedPosts);
@@ -50,7 +51,11 @@ async function seedPosts(usernames: IUsername[], userWithNoPosts: string): Promi
     console.log("Finished seeding posts");
 }
 
-async function seedUserPosts(username: string, maxNumOfPosts: number, percentageOfLikedPosts: number): Promise<void> {
+async function seedUserPosts(
+    username: string,
+    maxNumOfPosts: number,
+    percentageOfLikedPosts: number,
+): Promise<void> {
     let lastDate = getInitialDate();
     const posts: Omit<IPost, "id">[] = [];
     let actualPosts = 0;
@@ -67,7 +72,7 @@ async function seedUserPosts(username: string, maxNumOfPosts: number, percentage
             username,
             text: faker.lorem.words(20),
             liked: Math.random() * 100 < percentageOfLikedPosts,
-            datePublished: Date.parse(lastDate.toISOString())
+            datePublished: Date.parse(lastDate.toISOString()),
         });
 
         if (posts.length >= 500) {
@@ -98,6 +103,16 @@ function getInitialDate(): Date {
     return faker.date.between({ from, to });
 }
 
-const usernames = await seedUsers();
+export async function seed() {
+    const users = await knex.select("*").from<{ username: IUsername }>("users");
 
-await seedPosts(usernames, usernames[3]);
+    if (!users.length) {
+        console.log("seeding users");
+
+        const usernames = await seedUsers();
+
+        await seedPosts(usernames, usernames[3]);
+    } else {
+        console.log("no need to seed users");
+    }
+}
