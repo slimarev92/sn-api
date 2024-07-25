@@ -58,7 +58,7 @@ fastify.post("/api/posts/like", async (req, response) => {
 
 fastify.listen({
     host: "0.0.0.0",
-    port: 7777,
+    port: 5000,
 });
 
 seed();
