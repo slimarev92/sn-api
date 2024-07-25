@@ -4,13 +4,16 @@ import { queryClient } from "../../utils/query-client";
 import { IFeed } from "./Feed";
 
 export async function fetchLikePost(post: IPost): Promise<IPost> {
-    const res = await fetch("/api/posts/like", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
+    const res = await fetch(
+        "http://sn2-env-2.eba-spskym4m.us-east-1.elasticbeanstalk.com:5000/api/posts/like",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(post),
         },
-        body: JSON.stringify(post),
-    });
+    );
 
     const updatedPost = await res.json();
 
