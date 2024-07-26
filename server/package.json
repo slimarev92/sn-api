@@ -10,12 +10,13 @@
         "copy-manifest": "cp ./package.json ./dist && cp ./knexfile.js ./dist && cp ./migrations ./dist/migrations -r",
         "migrate": "pnpm knex migrate:latest --knexfile ./knexfile.mjs",
         "migrate-server": "npx knex migrate:latest --knexfile ./knexfile.mjs",
-        "start-server": "npm run migrate-server && node ./main.js"
+        "start-server": "node ./main.js"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "@types/node": "20.14.0",
         "prettier": "^3.3.2",
         "typescript": "^5.5.3"
     },

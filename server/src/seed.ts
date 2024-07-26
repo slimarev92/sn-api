@@ -3,6 +3,7 @@ import { faker } from "@faker-js/faker";
 import { IPost } from "./entities/post.js";
 import { IUsername } from "./entities/username.js";
 import dayjs from "dayjs";
+import { execSync } from "node:child_process";
 
 const knex = knexFactory({
     client: "sqlite3",
@@ -103,7 +104,7 @@ function getInitialDate(): Date {
     return faker.date.between({ from, to });
 }
 
-export async function seed() {
+export async function seed(): Promise<void> {
     const users = await knex.select("*").from<{ username: IUsername }>("users");
 
     if (!users.length) {
@@ -115,4 +116,10 @@ export async function seed() {
     } else {
         console.log("no need to seed users");
     }
+}
+
+export function migrate(): void {
+    execSync("npm run migrate-server");
+
+    console.log("finished migrating");
 }
