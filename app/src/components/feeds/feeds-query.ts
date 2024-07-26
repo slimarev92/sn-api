@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { IPost } from "../../entities/post";
 import { IFeed } from "./Feed";
+import BASE_URL from "../../utils/base-url";
 
 export async function fetchUserPosts(username: string): Promise<IPost[]> {
-    const res = await fetch(
-        `http://sn2-env-2.eba-spskym4m.us-east-1.elasticbeanstalk.com:5000/api/posts/${username}`,
-    );
+    const res = await fetch(`${BASE_URL}/api/posts/${username}`);
     const posts = (await res.json()) as IPost[];
 
     return posts;
